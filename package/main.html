@@ -16,12 +16,28 @@
 
 <body>
 
+<div id="header">
+    
+    <button id="btnClear">Clear</button>
+    <button id="btnSave">Save</button>
+    <button><label for="btnLoad">Load...</label></button>
+    
+    <div style="visibility:hidden;">
+        <input type="file" id="btnLoad" />
+        <a href=""></a>
+    </div>
+    
+</div>
 
-<textarea class="io" id="input">
-</textarea>
 
-<div class="io" id="output-container"><span id="output"></span></div>
+<div class="io" id="input-container">
+    <textarea id="input">
+    </textarea>
+</div>
 
+<div class="io" id="output-container">
+    <span id="output"></span>
+</div>
 
 </body>
 </html>
