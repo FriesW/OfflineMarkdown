@@ -5,6 +5,8 @@ function gid(id)
 
 function update()
 {
+    if( typeof(Storage) !== "undefined" )
+        localStorage.last = gid('input').value;
     gid('output').innerHTML = converter.makeHtml(gid('input').value);
 }
 
@@ -26,8 +28,12 @@ window.onload = function()
     gid('input').addEventListener('input', update);
     BehaveHooks.add('keydown', update);
     
-    
-    
+    //Check for previous session
+    if( typeof(Storage) !== "undefined" && localStorage.last )
+    {
+        gid('input').value = localStorage.last;
+        update();
+    }
     
 
 
