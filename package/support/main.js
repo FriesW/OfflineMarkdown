@@ -9,6 +9,30 @@ function update()
     gid('output').innerHTML = converter.makeHtml(gid('input').value);
 }
 
+function download()
+{
+    var dla = gid('file-download');
+    var md = gid('input').value;
+    var html = converter.makeHtml(md);
+    html = '\
+<!DOCTYPE html>\n\
+<html>\n\
+<head>\n\
+<meta charset="UTF-8">\n\
+</head>\n\
+<body>\n\n\n' + html + '\n\n\n</body>\n\
+</html>';
+    
+    dla.setAttribute('download', 'test.md');
+    dla.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(md));
+    dla.click();
+    dla.setAttribute('download', 'test.html');
+    dla.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(html));
+    dla.click();
+    dla.setAttribute('download','');
+    dla.setAttribute('href','');
+}
+
 
 var converter;
 
@@ -24,7 +48,7 @@ window.onload = function()
         update();
     });
     gid('btnSave').addEventListener('click', function(){
-        alert('update');
+        download();
     });
     
     //Setup the showdown markdown processor
