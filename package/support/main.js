@@ -3,13 +3,20 @@ function gid(id)
     return document.getElementById(id);
 }
 
+
+var converter;
+
 window.onload = function()
 {
-
-var converter = new showdown.Converter();
-var html = converter.makeHtml('#hello world!');
-
-gid('test').innerHTML = html;
+    
+    converter = new showdown.Converter();
+    converter.setFlavor('github');
+    
+    gid('input').addEventListener('input', function(){
+        gid('output').innerHTML = converter.makeHtml(gid('input').value);
+    });
+    
+    
 
 
 

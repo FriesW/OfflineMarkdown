@@ -1,0 +1,36 @@
+.io
+{
+    box-sizing: border-box;
+    position: fixed;
+    display: block;
+    top: 1%;
+    width: 48.5%;
+    height: 98%;
+}
+
+#input
+{
+    left: 1%;
+    
+    resize: none;
+    white-space: nowrap;
+    overflow: auto;
+}
+
+#output-container
+{
+    left: 50.5%;
+    
+    overflow: auto;
+    border-style: solid;
+    border-width: 1px;
+    
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+/*if output is a div*/
+/*#output
+{
+    display: inline-block;
+}*/
