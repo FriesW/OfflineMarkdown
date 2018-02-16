@@ -34,6 +34,24 @@ function download()
 }
 
 
+function file_import(e)
+{
+    var file = e.target.files[0];
+    var name = escape(file.name);
+    
+    var query = name.substr(name.length - 3);
+    if(query !== '.md' && query !== '.MD')
+        if(!confirm('File doesn\'t look like a markdown file.\nConfinue?'))
+            return;
+    
+    var reader = new FileReader();
+    reader.onload = function(f){
+        gid('input').value = f.target.result;
+    };
+    reader.readAsText(file);
+}
+
+
 var converter;
 
 window.onload = function()
@@ -50,10 +68,11 @@ window.onload = function()
     gid('btnSave').addEventListener('click', function(){
         download();
     });
+    gid('fileSelector').addEventListener('change', file_import);
     
     //Setup the showdown markdown processor
     converter = new showdown.Converter();
-    converter.setFlavor('github');
+    //converter.setFlavor('github');
     
     //Setup editor
     var editor = new Behave({
