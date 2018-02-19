@@ -30,11 +30,22 @@ function update_title()
 
 function download()
 {
-    var dla = gid('file-download');
+    var title = gid('inTitle').value;
     var md = gid('input').value;
+    
     var html = converter.makeHtml(md);
+    var md_embed = base64js.fromByteArray( pako.gzip( md, {level:9} ) );
+    
     html = '\
 <!DOCTYPE html>\n\
+<!--\n\
+This html was generated from a markdown file using:\n\
+https://github.com/FriesW/OfflineMarkdown\n\
+The original markdown can be reconstructed\n\
+with the following linux/unix commands:\n\
+echo \''+md_embed+'\'\\\n\
+| base64 -d | gzip -d > \''+title+'.md\'\n\
+-->\n\
 <html>\n\
 <head>\n\
 <meta charset="UTF-8">\n\
@@ -42,7 +53,7 @@ function download()
 <body>\n\n\n' + html + '\n\n\n</body>\n\
 </html>';
     
-    var title = gid('inTitle').value;
+    var dla = gid('file-download');
     dla.setAttribute('download', title + '.md');
     dla.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(md));
     dla.click();
