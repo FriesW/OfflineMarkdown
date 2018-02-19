@@ -9,3 +9,6 @@ https://github.com/nodeca/pako
 
 showdown
 https://github.com/showdownjs/showdown
+
+github-markdown
+https://github.com/sindresorhus/github-markdown-css
