@@ -34,10 +34,8 @@ function download()
 }
 
 
-function file_import(e)
+function file_import(file)
 {
-    var file = e.target.files[0];
-    gid('fileSelector').value = '';
     var name = escape(file.name);
     
     var query = name.substr(name.length - 3);
@@ -73,7 +71,29 @@ window.onload = function()
     gid('btnLoad').addEventListener('click', function(){
         gid('fileSelector').click();
     });
-    gid('fileSelector').addEventListener('change', file_import);
+    gid('fileSelector').addEventListener('change', function(e){
+        file_import(e.target.files[0]);
+        gid('fileSelector').value = '';
+    });
+    
+    //Setup dropzone
+    window.addEventListener('dragenter', function(){
+        gid('drop-zone-wrapper').style.visibility = 'visible';
+    });
+    gid('drop-zone-actual').addEventListener('dragleave', function(){
+        gid('drop-zone-wrapper').style.visibility = 'hidden';
+    });
+    gid('drop-zone-actual').addEventListener('dragover', function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+    });
+    gid('drop-zone-actual').addEventListener('drop', function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        gid('drop-zone-wrapper').style.visibility = 'hidden';
+        file_import(e.dataTransfer.files[0]);
+    });
     
     //Setup the showdown markdown processor
     converter = new showdown.Converter();
