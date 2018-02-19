@@ -53,7 +53,7 @@ echo \''+md_embed+'\'\\\n\
 '+github_markdown_style+'\n\
 </style>\n\
 </head>\n\
-<body class="markdown-body">\n\n\n' + html + '\n\n\n</body>\n\
+<body>\n\n\n' + html + '\n\n\n</body>\n\
 </html>';
     
     var dla = gid('file-download');
