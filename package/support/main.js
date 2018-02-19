@@ -97,7 +97,8 @@ window.onload = function()
     
     //Setup the showdown markdown processor
     converter = new showdown.Converter();
-    //converter.setFlavor('github');
+    converter.setFlavor('github');
+    converter.setOption('simpleLineBreaks', false);
     
     //Setup editor
     var editor = new Behave({
