@@ -22,10 +22,25 @@
     <button id="btnSave">Save</button>
     <button id="btnLoad">Load...</button>
     
-    <div style="visibility:hidden;">
-        <input type="file" id="fileSelector" accept=".md" />
-        <a id="file-download"></a>
-    </div>
+    <div class="pad"></div>
+    
+    <button>Undo</button>
+    <button>Redo</button>
+    
+    <div class="pad"></div>
+    
+    Title:
+    <input id="inTitle" type="text">
+    <button id="btnGenTitle">Generate Title</button>
+    
+    <div class="pad"></div>
+    <div class="pad"></div>
+    
+    Cheat sheets:
+    <a target="_blank" href="https://guides.github.com/pdfs/markdown-cheatsheet-online.pdf">Quick</a>
+    <a target="_blank" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">Through</a>
+    <a target="_blank" href="https://github.com/mity/md4c/wiki/Markdown-Syntax:-Tables">Tables</a>
+    <a target="_blank" href="https://www.webpagefx.com/tools/emoji-cheat-sheet/">Emoji</a>
     
 </div>
 
@@ -51,6 +66,13 @@
     <!-- Must be on top of all other elements -->
     </div>
     
+</div>
+
+
+<!-- Always hidden assistant tags -->
+<div style="visibility:hidden;">
+    <input type="file" id="fileSelector" accept=".md" />
+    <a id="file-download"></a>
 </div>
 
 
