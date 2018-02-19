@@ -37,6 +37,7 @@ function download()
 function file_import(e)
 {
     var file = e.target.files[0];
+    gid('fileSelector').value = '';
     var name = escape(file.name);
     
     var query = name.substr(name.length - 3);
@@ -47,6 +48,7 @@ function file_import(e)
     var reader = new FileReader();
     reader.onload = function(f){
         gid('input').value = f.target.result;
+        update();
     };
     reader.readAsText(file);
 }
@@ -67,6 +69,9 @@ window.onload = function()
     });
     gid('btnSave').addEventListener('click', function(){
         download();
+    });
+    gid('btnLoad').addEventListener('click', function(){
+        gid('fileSelector').click();
     });
     gid('fileSelector').addEventListener('change', file_import);
     
