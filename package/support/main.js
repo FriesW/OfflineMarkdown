@@ -1,3 +1,7 @@
+function padLeft(nr, n, str){
+    return Array(n-String(nr).length+1).join(str||'0')+nr;
+}
+
 function gid(id)
 {
     return document.getElementById(id);
@@ -38,10 +42,11 @@ function download()
 <body>\n\n\n' + html + '\n\n\n</body>\n\
 </html>';
     
-    dla.setAttribute('download', 'test.md');
+    var title = gid('inTitle').value;
+    dla.setAttribute('download', title + '.md');
     dla.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(md));
     dla.click();
-    dla.setAttribute('download', 'test.html');
+    dla.setAttribute('download', title + '.html');
     dla.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(html));
     dla.click();
     dla.setAttribute('download','');
@@ -52,6 +57,8 @@ function download()
 function file_import(file)
 {
     var name = escape(file.name);
+    gid('inTitle').value = name.replace(/(\.md|\.html)$/, '');
+    update_title();
     
     var query = name.substr(name.length - 3);
     if(query !== '.md' && query !== '.MD')
@@ -108,6 +115,17 @@ window.onload = function()
         update_title();
     });
     gid('inTitle').addEventListener('blur', function(){
+        update_title();
+    });
+    
+    //Setup title gen button
+    gid('btnGenTitle').addEventListener('click', function(){
+        var d = new Date();
+        gid('inTitle').value = d.getFullYear() + '_' +
+                               padLeft(d.getMonth() + 1, 2) + '_' +
+                               padLeft(d.getDate(), 2) + '--' +
+                               padLeft(d.getHours(), 2) + ':' +
+                               padLeft(d.getMinutes(), 2);
         update_title();
     });
     
