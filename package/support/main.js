@@ -9,6 +9,21 @@ function update()
     gid('output').innerHTML = converter.makeHtml(gid('input').value);
 }
 
+function update_title()
+{
+    var title = gid('inTitle').value;
+    localStorage.title = title;
+    if(title == '' && document.activeElement !== gid('inTitle'))
+    {
+        gid('inTitle').value = 'Untitled';
+        gid('inTitle').style.fontStyle = 'italic';
+    }
+    else if(title == 'Untitled' || title == 'untitled')
+        gid('inTitle').style.fontStyle = 'italic';
+    else
+        gid('inTitle').style.fontStyle = 'normal';
+}
+
 function download()
 {
     var dla = gid('file-download');
@@ -63,7 +78,9 @@ window.onload = function()
     //Setup buttons
     gid('btnClear').addEventListener('click', function(){
         gid('input').value = '';
+        gid('inTitle').value = '';
         update();
+        update_title();
     });
     gid('btnSave').addEventListener('click', function(){
         download();
@@ -74,6 +91,24 @@ window.onload = function()
     gid('fileSelector').addEventListener('change', function(e){
         file_import(e.target.files[0]);
         gid('fileSelector').value = '';
+    });
+    
+    //Setup title box
+    gid('inTitle').addEventListener('keyup', function(){
+        update_title();
+    });
+    gid('inTitle').addEventListener('change', function(){
+        gid('inTitle').value = gid('inTitle').value.replace(/(\.md|\.html)$/, '');
+        update_title();
+    });
+    gid('inTitle').addEventListener('focus', function(){
+        var title = gid('inTitle').value;
+        if(title == 'untitled' || title == 'Untitled')
+            gid('inTitle').value = '';
+        update_title();
+    });
+    gid('inTitle').addEventListener('blur', function(){
+        update_title();
     });
     
     //Setup dropzone
@@ -113,8 +148,12 @@ window.onload = function()
         gid('input').value = localStorage.last;
     else
         gid('input').value = '';
+    if( localStorage.title )
+        gid('inTitle').value = localStorage.title;
+    
     
     update();
+    update_title();
     
 
 
