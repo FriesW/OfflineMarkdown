@@ -1,36 +1,12 @@
-function padLeft(nr, n, str){
-    return Array(n-String(nr).length+1).join(str||'0')+nr;
-}
-
-function gid(id)
-{
-    return document.getElementById(id);
-}
-
 function update()
 {
     localStorage.last = gid('input').value;
     gid('output').innerHTML = converter.makeHtml(gid('input').value);
 }
 
-function update_title()
-{
-    var title = gid('inTitle').value;
-    localStorage.title = title;
-    if(title == '' && document.activeElement !== gid('inTitle'))
-    {
-        gid('inTitle').value = 'Untitled';
-        gid('inTitle').style.fontStyle = 'italic';
-    }
-    else if(title == 'Untitled' || title == 'untitled')
-        gid('inTitle').style.fontStyle = 'italic';
-    else
-        gid('inTitle').style.fontStyle = 'normal';
-}
-
 function download()
 {
-    var title = gid('inTitle').value;
+    var title = title_obj.get();
     var md = gid('input').value;
     
     var html = converter.makeHtml(md);
@@ -71,7 +47,7 @@ echo \''+md_embed+'\'\\\n\
 function file_import(file)
 {
     var name = escape(file.name);
-    gid('inTitle').value = name.replace(/(\.md|\.html)$/, '');
+    title_obj.set(name);
     update_title();
     
     var query = name.substr(name.length - 3);
@@ -89,6 +65,7 @@ function file_import(file)
 
 
 var converter;
+var title_obj;
 
 window.onload = function()
 {
@@ -99,9 +76,7 @@ window.onload = function()
     //Setup buttons
     gid('btnClear').addEventListener('click', function(){
         gid('input').value = '';
-        gid('inTitle').value = '';
-        update();
-        update_title();
+        title_obj.clear();
     });
     gid('btnSave').addEventListener('click', function(){
         download();
@@ -115,32 +90,17 @@ window.onload = function()
     });
     
     //Setup title box
-    gid('inTitle').addEventListener('keyup', function(){
-        update_title();
-    });
-    gid('inTitle').addEventListener('change', function(){
-        gid('inTitle').value = gid('inTitle').value.replace(/(\.md|\.html)$/, '');
-        update_title();
-    });
-    gid('inTitle').addEventListener('focus', function(){
-        var title = gid('inTitle').value;
-        if(title == 'untitled' || title == 'Untitled')
-            gid('inTitle').value = '';
-        update_title();
-    });
-    gid('inTitle').addEventListener('blur', function(){
-        update_title();
-    });
+    title_obj = new Title( gid('inTitle') );
     
     //Setup title gen button
     gid('btnGenTitle').addEventListener('click', function(){
         var d = new Date();
-        gid('inTitle').value = d.getFullYear() + '_' +
-                               padLeft(d.getMonth() + 1, 2) + '_' +
-                               padLeft(d.getDate(), 2) + '--' +
-                               padLeft(d.getHours(), 2) + ':' +
-                               padLeft(d.getMinutes(), 2);
-        update_title();
+        var t =    d.getFullYear() + '_' +
+           padLeft(d.getMonth() + 1, 2) + '_' +
+           padLeft(d.getDate(), 2) + '--' +
+           padLeft(d.getHours(), 2) + ':' +
+           padLeft(d.getMinutes(), 2);
+        title_obj.set(t);
     });
     
     //Setup dropzone
@@ -180,12 +140,9 @@ window.onload = function()
         gid('input').value = localStorage.last;
     else
         gid('input').value = '';
-    if( localStorage.title )
-        gid('inTitle').value = localStorage.title;
     
     
     update();
-    update_title();
     
 
 
