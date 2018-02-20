@@ -1,63 +1,3 @@
-function download()
-{
-    var title = title_obj.get();
-    var md = gid('input').value;
-    
-    var html = converter.makeHtml(md);
-    var md_embed = base64js.fromByteArray( pako.gzip( md, {level:9} ) );
-    
-    html = '\
-<!DOCTYPE html>\n\
-<!--\n\
-This html was generated from a markdown file using:\n\
-https://github.com/FriesW/OfflineMarkdown\n\
-The original markdown can be reconstructed\n\
-with the following linux/unix commands:\n\
-echo \''+md_embed+'\'\\\n\
-| base64 -d | gzip -d > \''+title+'.md\'\n\
--->\n\
-<html>\n\
-<head>\n\
-<meta charset="UTF-8">\n\
-<style>\n\
-'+github_markdown_style+'\n\
-</style>\n\
-</head>\n\
-<body>\n\n\n' + html + '\n\n\n</body>\n\
-</html>';
-    
-    var dla = gid('file-download');
-    dla.setAttribute('download', title + '.md');
-    dla.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(md));
-    dla.click();
-    dla.setAttribute('download', title + '.html');
-    dla.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(html));
-    dla.click();
-    dla.setAttribute('download','');
-    dla.setAttribute('href','');
-}
-
-
-function file_import(file)
-{
-    var name = escape(file.name);
-    title_obj.set(name);
-    update_title();
-    
-    var query = name.substr(name.length - 3);
-    if(query !== '.md' && query !== '.MD')
-        if(!confirm('File doesn\'t look like a markdown file.\nConfinue?'))
-            return;
-    
-    var reader = new FileReader();
-    reader.onload = function(f){
-        gid('input').value = f.target.result;
-        update();
-    };
-    reader.readAsText(file);
-}
-
-
 var title_obj;
 var editor_obj;
 
@@ -73,13 +13,17 @@ window.onload = function()
         title_obj.clear();
     });
     gid('btnSave').addEventListener('click', function(){
-        download();
+        var data = editor_obj.get();
+        FileIO.export_f(title_obj.get(), data[0], data[1]);
     });
     gid('btnLoad').addEventListener('click', function(){
         gid('fileSelector').click();
     });
     gid('fileSelector').addEventListener('change', function(e){
-        file_import(e.target.files[0]);
+        FileIO.import_f(e.target.files[0], function(t, r){
+            title_obj.set(t);
+            editor_obj.set(r);
+        });
         gid('fileSelector').value = '';
     });
     
@@ -113,7 +57,10 @@ window.onload = function()
         e.stopPropagation();
         e.preventDefault();
         gid('drop-zone-wrapper').style.visibility = 'hidden';
-        file_import(e.dataTransfer.files[0]);
+        FileIO.import_f(e.dataTransfer.files[0], function(t, r){
+            title_obj.set(t);
+            editor_obj.set(r);
+        });
     });
     
     
