@@ -13,7 +13,6 @@ class Title {
         this.t.addEventListener('focus', this._on_focus.bind(this));
         this.t.addEventListener('blur', this._on_blur.bind(this));
         
-        
         //Load if available
         this.ls = typeof(Storage) !== "undefined";
         if( this.ls && localStorage[this.LS_NAME] )

@@ -1,9 +1,3 @@
-function update()
-{
-    localStorage.last = gid('input').value;
-    gid('output').innerHTML = converter.makeHtml(gid('input').value);
-}
-
 function download()
 {
     var title = title_obj.get();
@@ -64,8 +58,8 @@ function file_import(file)
 }
 
 
-var converter;
 var title_obj;
+var editor_obj;
 
 window.onload = function()
 {
@@ -75,7 +69,7 @@ window.onload = function()
     
     //Setup buttons
     gid('btnClear').addEventListener('click', function(){
-        gid('input').value = '';
+        editor_obj.clear();
         title_obj.clear();
     });
     gid('btnSave').addEventListener('click', function(){
@@ -122,28 +116,8 @@ window.onload = function()
         file_import(e.dataTransfer.files[0]);
     });
     
-    //Setup the showdown markdown processor
-    converter = new showdown.Converter();
-    converter.setFlavor('github');
-    converter.setOption('simpleLineBreaks', false);
     
-    //Setup editor
-    var editor = new Behave({
-        textarea: gid('input')
-    });
-    
-    //Setup input change
-    BehaveHooks.add('keyup', update);
-    
-    //Check for previous session
-    if( localStorage.last )
-        gid('input').value = localStorage.last;
-    else
-        gid('input').value = '';
-    
-    
-    update();
-    
+    editor_obj = new Editor(gid('input'), gid('output'));
 
 
 
