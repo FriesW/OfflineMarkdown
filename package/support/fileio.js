@@ -54,7 +54,6 @@ echo '<<< B64ENC >>>'\\
 -->
 `;
 
-        console.log(markdown);
         var encoded = base64js.fromByteArray( pako.gzip( markdown, {level:9} ) )
         
         //Replace in reverse order to prevent any collisions
