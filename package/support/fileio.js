@@ -31,19 +31,11 @@ class FileIO {
     static export_f(title, markdown, html)
     {
         var base =
-`
-<!DOCTYPE html>
-<!--
-This html was generated from a markdown file using:
-https://github.com/FriesW/OfflineMarkdown
-The original markdown can be reconstructed
-with the following linux/unix commands:
-echo '<<< B64ENC >>>'\\
-| base64 -d | gzip -d > '<<< TITLE >>>.md'
--->
+`<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<title><<< PG_TITLE >>></title>
 <style>
 <<< STYLE >>>
 </style>
@@ -52,16 +44,25 @@ echo '<<< B64ENC >>>'\\
 <<< HTML >>>
 </body>
 </html>
+<!--
+This html was generated from a markdown file using:
+https://github.com/FriesW/OfflineMarkdown
+The original markdown can be reconstructed
+with the following linux/unix commands:
+echo '<<< B64ENC >>>'\\
+| base64 -d | gzip -d > '<<< TITLE >>>.md'
+-->
 `;
 
         console.log(markdown);
         var encoded = base64js.fromByteArray( pako.gzip( markdown, {level:9} ) )
         
         //Replace in reverse order to prevent any collisions
-        base = base.replace("<<< HTML >>>", html);
-        base = base.replace("<<< STYLE >>>", '');
         base = base.replace("<<< TITLE >>>", title);
         base = base.replace("<<< B64ENC >>>", encoded);
+        base = base.replace("<<< HTML >>>", html);
+        base = base.replace("<<< STYLE >>>", '');
+        base = base.replace("<<< PG_TITLE >>>", title);
         
         FileIO._dl_file(title + '.md', markdown);
         FileIO._dl_file(title + '.html', base);
