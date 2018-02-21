@@ -23,6 +23,7 @@ class Editor {
             textarea: this.md_in
         });
         BehaveHooks.add('keyup', this._update.bind(this));
+        this.md_in.addEventListener('input', this._update.bind(this));//Catch browser spellcheck
         
         //Catch weird behave hooks bug...
         if( this.md_in.value == '    ')
@@ -52,6 +53,12 @@ class Editor {
     _update()
     {
         var md = this.md_in.value;
+        
+        //Check that there is a change...
+        if(this.last_update_state == md)
+            return;
+        this.last_update_state = md;
+        
         if(this.ls)
             localStorage[this.LS_NAME] = md;
         this.html_out.innerHTML = this.conv.makeHtml(md);
