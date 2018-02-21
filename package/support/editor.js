@@ -7,6 +7,7 @@ class Editor {
         //setup vars
         this.md_in = DOMinput;
         this.html_out = DOMoutput;
+        this.hist = new History();
         
         //Load if available
         this.ls = typeof(Storage) !== "undefined";
@@ -29,17 +30,20 @@ class Editor {
         if( this.md_in.value == '    ')
             this.md_in.value = '';
         
+        this.hist.add(this.md_in.value);
         this._update();
     }
     
     clear()
     {
         this.set('');
+        this.hist.add('');
     }
     
     set(new_md)
     {
         this.md_in.value = new_md;
+        this.hist.add(new_md);
         this._update();
     }
     
@@ -62,6 +66,28 @@ class Editor {
         if(this.ls)
             localStorage[this.LS_NAME] = md;
         this.html_out.innerHTML = this.conv.makeHtml(md);
+        
+        this.hist.suggest(md); //hmmmmmmm....
+    }
+    
+    undo()
+    {
+        var b = this.hist.backward();
+        if(b)
+        {
+            this.md_in.value = b;
+            this._update();
+        }
+    }
+    
+    redo()
+    {
+        var f = this.hist.forward();
+        if(f)
+        {
+            this.md_in.value = f;
+            this._update();
+        }
     }
 
 }

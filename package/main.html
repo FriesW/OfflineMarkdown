@@ -10,11 +10,14 @@
 <link rel="stylesheet" type="text/css" href="support/lib/github-markdown.css">
 <script src="support/lib/github-markdown.js" ></script>
 
-<script src="support/util.js" ></script>
 <script src="support/lib/showdown.js" ></script>
 <script src="support/lib/behave.js" ></script>
 <script src="support/lib/pako.js" ></script>
 <script src="support/lib/base64js.min.js" ></script>
+
+<script src="support/util.js" ></script>
+<script src="support/stack.js" ></script>
+<script src="support/history.js" ></script>
 <script src="support/fileio.js" ></script>
 <script src="support/editor.js" ></script>
 <script src="support/title.js" ></script>
@@ -32,8 +35,8 @@
     
     <div class="pad"></div>
     
-    <button>Undo</button>
-    <button>Redo</button>
+    <button id="btnUndo">Undo</button>
+    <button id="btnRedo">Redo</button>
     
     <div class="pad"></div>
     

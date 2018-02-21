@@ -27,6 +27,14 @@ window.onload = function()
         gid('fileSelector').value = '';
     });
     
+    gid('btnUndo').addEventListener('click', function(){
+        editor_obj.undo();
+    });
+    
+    gid('btnRedo').addEventListener('click', function(){
+        editor_obj.redo();
+    });
+    
     //Setup title box
     title_obj = new Title( gid('inTitle') );
     
