@@ -73,6 +73,12 @@ window.onload = function()
     
     
     editor_obj = new Editor(gid('input'), gid('output'));
+    
+    editor_obj.addHistoryListener(function(undo, redo){
+        console.log('notif', undo, redo);
+        gid('btnUndo').disabled = !undo;
+        gid('btnRedo').disabled = !redo;
+    });
 
 
 

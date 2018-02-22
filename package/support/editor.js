@@ -5,6 +5,7 @@ class Editor {
         this.LS_NAME = 'contents';
         
         //setup vars
+        this.listeners = [];
         this.md_in = DOMinput;
         this.html_out = DOMoutput;
         
@@ -71,6 +72,7 @@ class Editor {
         this.html_out.innerHTML = this.conv.makeHtml(md);
         
         this.hist.update(md);
+        this._notify_listeners();
     }
     
     undo()
@@ -80,8 +82,7 @@ class Editor {
             this.md_in.value = this.hist.backward();
             this._update();
         }
-        else
-            console.log('Nothing older left...');
+        this._notify_listeners();
     }
     
     redo()
@@ -91,8 +92,20 @@ class Editor {
             this.md_in.value = this.hist.forward();
             this._update();
         }
-        else
-            console.log('Nothing newer left...');
+        this._notify_listeners();
+    }
+    
+    addHistoryListener(a_function)
+    {
+        this.listeners.push(a_function);
+    }
+    
+    _notify_listeners()
+    {
+        var hb = this.hist.has_backward();
+        var hf = this.hist.has_forward();
+        for(var i = 0; i < this.listeners.length; i++)
+            this.listeners[i](hb, hf);
     }
 
 }
