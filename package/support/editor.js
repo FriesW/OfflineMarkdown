@@ -22,8 +22,12 @@ class Editor {
         new Behave({
             textarea: this.md_in
         });
-        BehaveHooks.add('keyup', this._update.bind(this));
-        this.md_in.addEventListener('input', this._update.bind(this));//Catch browser spellcheck
+        BehaveHooks.add('keyup', this._update.bind(this)); //General update
+        this.md_in.addEventListener('input', this._update.bind(this)); //Update on browser spellcheck
+        //Update history on tab change
+        BehaveHooks.add('tab:after', function(){
+            this.hist.add(this.md_in.value);
+        }.bind(this));
         
         //Catch weird behave hooks bug...
         if( this.md_in.value == '    ')

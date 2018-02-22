@@ -35,10 +35,12 @@ class History{
             throw 'history.update: parameter must be a string';
         
         //TODO add suggestion logic
-        var go = true;
+        var go =
+            this.suggest_pos == 10 ||
+            !this.has_backward(); //If empty
         
         this.suggest_pos++;
-        if( this.suggest_pos == 10 )
+        if( go )
         {
             this.add(new_text);
             this.suggest_pos = 0;
