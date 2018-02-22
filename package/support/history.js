@@ -11,8 +11,14 @@ class History{
         else
             this.current = '';
         
-        //this.old_text = this.current;
+        //this._set_old();
         this.add(this.current);
+    }
+    
+    _set_old()
+    {
+        this.old_time = new Date();
+        this.old_text = this.current;
     }
     
     //The provided text must be put into history
@@ -20,22 +26,31 @@ class History{
     {
         if(!is_string(new_text))
             throw 'history.add: parameter must be a string';
+        this._set_old();
         //Must be different from most recent to add it
         if(this.back.height() > 0 && this.back.peek() == new_text)
             return;
         this.back.push(new_text);
         this.front.empty();
         
-        this.old_text = this.current;
         this.current = new_text;
     }
     
     //The provided text is updating the current state, and *might* be put into history
     //However, if backward is called, then the last update *will* go into history
+    //Will add if: 7 seconds old, 40 characters of add or delete, a sentence
     update(new_text)
     {
         if(!is_string(new_text))
             throw 'history.update: parameter must be a string';
+        
+        //Check time
+        if( (new Date()).getTime() - this.old_time.getTime() > 7000 ) //7 seconds
+        {
+            this.add(this.current);
+            this.current = new_text;
+            return;
+        }
         
         //Calculate difference
         var diff_array = JsDiff.diffChars(this.old_text, new_text);
@@ -63,11 +78,9 @@ class History{
             total_add > 40 ||
             total_remove > 40 ||
             add_group ;
-        console.log('update:', total_add, total_remove, add_group);
         if( go )
         {
             this.add(new_text);
-            console.log('Go!');
         }
         
         this.current = new_text;
@@ -83,7 +96,7 @@ class History{
         if(this.has_backward())
             this.front.push(this.current);
             this.current = this.back.pop();
-        this.old_text = this.current;
+        this._set_old();
         return this.current;
     }
     
@@ -97,7 +110,7 @@ class History{
         if(this.has_forward())
             this.back.push(this.current);
             this.current = this.front.pop();
-        this.old_text = this.current;
+        this._set_old();
         return this.current;
     }
 
