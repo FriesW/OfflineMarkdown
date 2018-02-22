@@ -12,3 +12,6 @@ https://github.com/showdownjs/showdown
 
 github-markdown
 https://github.com/sindresorhus/github-markdown-css
+
+jsdiff
+https://github.com/kpdecker/jsdiff
