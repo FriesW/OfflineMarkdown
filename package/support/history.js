@@ -22,10 +22,10 @@ class History{
         //Must be different from current to add it
         if(this.current == new_text)
             return;
-        this.back.push(this.current);
+        this.back.push(new_text);
         this.front.empty();
+        
         this.current = new_text;
-        console.log('ADD');
     }
     
     //The provided text is updating the current state, and *might* be put into history
@@ -34,22 +34,39 @@ class History{
     {
         if(!is_string(new_text))
             throw 'history.update: parameter must be a string';
+        
         //Calculate difference
         var old_text = this.back.height() == 0 ? '' : this.back.peek();
-        var diff_text = History._str_diff(new_text, old_text);
-        console.log('DIFF:', diff_text.length, diff_text);
+        var diff_array = JsDiff.diffChars(old_text, new_text);
+        
+        var total_add = 0;
+        var total_remove =  0;
+        var add_space_end = false;
+        
+        var re_space_end = /^[^ \r\n\.]+(\r\n|\r|\n| |\.)$/; //Ends with newline, space, or period. 
+        for(var i = 0 ; i < diff_array.length; i++)
+        {
+            var ds = diff_array[i]; //diff_segment
+            if(is_set(ds.removed) && ds.removed)
+                total_remove += ds.value.length;
+            if(is_set(ds.added) && ds.added)
+            {
+                total_add += ds.value.length;
+                if(re_space_end.test(ds.value))
+                    add_space_end = true;
+            }
+        }
         
         var go =
-            //this.suggest_pos == 10 ||
-            diff_text.length > 15 ||
-            diff_text.match(/^[^_]+_$/) ||
-            !this.has_backward(); //If empty
+            total_add > 10 ||
+            total_remove > 10 ||
+            add_space_end ;//||
+            // !this.has_backward(); //If empty
         
-        //this.suggest_pos++;
         if( go )
         {
             this.add(new_text);
-            //this.suggest_pos = 0;
+            console.log('Updating...');
         }
         
         this.current = new_text;
@@ -79,44 +96,6 @@ class History{
             this.back.push(this.current);
             this.current = this.front.pop();
         return this.current;
-    }
-    
-    static _diff_start(a, b)
-    {
-        if(!is_string(a) || !is_string(b))
-            throw 'diff: must be a string';
-        if(a == b)
-            return 0;
-        if (a == '' || b == '')
-            return 0;
-        var i = 0;
-        while(a[i] === b[i]) i++;
-        return i;
-    }
-    
-    static _diff_end(a, b)
-    {
-        if(!is_string(a) || !is_string(b))
-            throw 'diff: must be a string';
-        if(a == b)
-            return a.length;
-        if (a == '' || b == '')
-            return 0;
-        var i = 0;
-        while(a[a.length - i] === b[b.length - i]) i++;
-        return i - 1;
-    }
-    
-    static _str_diff(a, b)
-    {
-        console.log('GOT:', a, ':', b);
-        var s_diff = History._diff_start(a, b);
-        var e_diff = History._diff_end(a, b);
-        //Edge case: repeated letter on diff boundary
-        if(a[s_diff] == a[s_diff - 1])
-            s_diff--;
-        var longest = a.length > b.length ? a : b;
-        return longest.substring(s_diff, longest.length - e_diff);
     }
 
 }
