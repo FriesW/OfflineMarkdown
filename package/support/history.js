@@ -11,7 +11,8 @@ class History{
         else
             this.current = '';
         
-        this.suggest_pos = 0;
+        //this.old_text = this.current;
+        this.add(this.current);
     }
     
     //The provided text must be put into history
@@ -19,12 +20,13 @@ class History{
     {
         if(!is_string(new_text))
             throw 'history.add: parameter must be a string';
-        //Must be different from current to add it
-        if(this.current == new_text)
+        //Must be different from most recent to add it
+        if(this.back.height() > 0 && this.back.peek() == new_text)
             return;
         this.back.push(new_text);
         this.front.empty();
         
+        this.old_text = this.current;
         this.current = new_text;
     }
     
@@ -36,14 +38,14 @@ class History{
             throw 'history.update: parameter must be a string';
         
         //Calculate difference
-        var old_text = this.back.height() == 0 ? '' : this.back.peek();
-        var diff_array = JsDiff.diffChars(old_text, new_text);
+        var diff_array = JsDiff.diffChars(this.old_text, new_text);
         
         var total_add = 0;
         var total_remove =  0;
-        var add_space_end = false;
+        var add_group = false;
         
-        var re_space_end = /^[^ \r\n\.]+(\r\n|\r|\n| |\.)$/; //Ends with newline, space, or period. 
+        //var re_group = /[^ \r\n\.;]+(\.|\?|\!|-|;| |\r\n|\r|\n)/; //catches most words
+        var re_group = /[^\r\n\.;]+(\.|\?|\!|;|\r\n|\r|\n)/;
         for(var i = 0 ; i < diff_array.length; i++)
         {
             var ds = diff_array[i]; //diff_segment
@@ -52,21 +54,20 @@ class History{
             if(is_set(ds.added) && ds.added)
             {
                 total_add += ds.value.length;
-                if(re_space_end.test(ds.value))
-                    add_space_end = true;
+                if(re_group.test(ds.value))
+                    add_group = true;
             }
         }
         
         var go =
-            total_add > 10 ||
-            total_remove > 10 ||
-            add_space_end ;//||
-            // !this.has_backward(); //If empty
-        
+            total_add > 40 ||
+            total_remove > 40 ||
+            add_group ;
+        console.log('update:', total_add, total_remove, add_group);
         if( go )
         {
             this.add(new_text);
-            console.log('Updating...');
+            console.log('Go!');
         }
         
         this.current = new_text;
@@ -82,6 +83,7 @@ class History{
         if(this.has_backward())
             this.front.push(this.current);
             this.current = this.back.pop();
+        this.old_text = this.current;
         return this.current;
     }
     
@@ -95,6 +97,7 @@ class History{
         if(this.has_forward())
             this.back.push(this.current);
             this.current = this.front.pop();
+        this.old_text = this.current;
         return this.current;
     }
 
