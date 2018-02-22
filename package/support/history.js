@@ -1,60 +1,76 @@
 class History{
     
-    constructor()
+    constructor(init_text)
     {
-        this.hb = new Stack(); //Backward history
-        this.hf = new Stack(); //Forward history
-        this.last_suggest = '';
+        this.back = new Stack(); //Backward history
+        this.front = new Stack(); //Forward history
+        if(is_string(init_text))
+            this.current = init_text;
+        else if(is_set(init_text))
+            throw 'history.init: parameter must be a string';
+        else
+            this.current = '';
         
         this.suggest_pos = 0;
     }
     
-    add(current)
+    //The provided text must be put into history
+    add(new_text)
     {
-        this.last_suggest = '';
-        //Check that it is different then the top item
-        if(this.hb.height() > 0 && this.hb.peek() == current)
+        if(!is_string(new_text))
+            throw 'history.add: parameter must be a string';
+        //Must be different from current to add it
+        if(this.current == new_text)
             return;
-        this.hb.push(current);
-        this.hf.empty();
+        this.back.push(this.current);
+        this.front.empty();
+        this.current = new_text;
     }
     
-    suggest(current)
+    //The provided text is updating the current state, and *might* be put into history
+    //However, if backward is called, then the last update *will* go into history
+    update(new_text)
     {
-        if(this.hb.contains(current) || this.hf.contains(current))
-            return;
+        if(!is_string(new_text))
+            throw 'history.update: parameter must be a string';
         
-        this.last_suggest = current;
         //TODO add suggestion logic
         var go = true;
         
         this.suggest_pos++;
         if( this.suggest_pos == 10 )
         {
-            this.add(current);
+            this.add(new_text);
             this.suggest_pos = 0;
         }
+        
+        this.current = new_text;
+    }
+    
+    has_backward()
+    {
+        return this.back.height() > 0;
     }
     
     backward()
     {
-        if(this.hb.height() == 1)
-            return false;
-        
-        if(this.last_suggest != '')
-            this.add(this.last_suggest);
-        
-        this.hf.push(this.hb.pop());
-        return this.hb.peek();
+        if(this.has_backward())
+            this.front.push(this.current);
+            this.current = this.back.pop();
+        return this.current;
+    }
+    
+    has_forward()
+    {
+        return this.front.height() > 0;
     }
     
     forward()
     {
-        if(this.hf.height() == 0)
-            return false;
-        
-        this.hb.push(this.hf.pop());
-        return this.hb.peek();
+        if(this.has_forward())
+            this.back.push(this.current);
+            this.current = this.front.pop();
+        return this.current;
     }
 
 }

@@ -2,7 +2,7 @@ class Stack{
     
     constructor(builder)
     {
-        if(typeof builder === 'string')
+        if(is_string(builder))
             this.s = JSON.parse(builder);
         else
             this.s = [];
@@ -18,11 +18,6 @@ class Stack{
         this.s = [];
     }
     
-    contains(item)
-    {
-        return this.s.indexOf(item) > -1;
-    }
-    
     push(item)
     {
         this.s.push(item);
@@ -31,14 +26,14 @@ class Stack{
     peek()
     {
         if(this.height() == 0)
-            throw "Stack error: peek on size of 0.";
+            throw 'stack.peek: access on size of 0';
         return this.s[this.s.length - 1];
     }
     
     pop()
     {
         if(this.height() == 0)
-            throw "Stack error: pop on size of 0.";
+            throw 'stack.pop: access on size of 0';
         return this.s.pop();
     }
     
