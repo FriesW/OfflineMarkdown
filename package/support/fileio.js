@@ -36,6 +36,8 @@ class FileIO {
     
     static export_f(title, markdown, html)
     {
+        if( !is_string(title) || !is_string(markdown) || !is_string(html) )
+            throw 'FileIO.export_f: parameters must be strings';
         var base =
 `<!DOCTYPE html>
 <html>

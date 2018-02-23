@@ -66,6 +66,8 @@ class Editor {
     
     set(new_md)
     {
+        if(!is_string(new_md))
+            throw 'editor.set: parameter must be a string';
         this.md_in.value = new_md;
         this.hist.add(new_md);
         this._update();

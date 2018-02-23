@@ -31,6 +31,8 @@ class Title {
     
     set(newTitle)
     {
+        if(!is_string(newTitle))
+            throw 'title.set: parameter must be a string';
         this.title = newTitle.replace(/(\.md|\.html)$/, '');
         this._update();
     }
