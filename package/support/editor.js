@@ -10,8 +10,7 @@ class Editor {
         this.html_out = DOMoutput;
         
         //Load if available
-        this.ls = typeof(Storage) !== "undefined";
-        if( this.ls && localStorage[this.LS_NAME] )
+        if( has_storage() && localStorage[this.LS_NAME] )
             this.md_in.value = localStorage[this.LS_NAME];
         
         //Setup md->html
@@ -89,7 +88,7 @@ class Editor {
             return;
         this.last_update_state = md;
         
-        if(this.ls)
+        if(has_storage())
             localStorage[this.LS_NAME] = md;
         this.html_out.innerHTML = this.conv.makeHtml(md);
         

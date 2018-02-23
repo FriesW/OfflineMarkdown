@@ -23,3 +23,8 @@ function is_set(item)
 {
     return !is_type(item, 'undefined') && item !== null;
 }
+
+function has_storage()
+{
+    return typeof(Storage) !== 'undefined';
+}

@@ -14,8 +14,7 @@ class Title {
         this.t.addEventListener('blur', this._on_blur.bind(this));
         
         //Load if available
-        this.ls = typeof(Storage) !== "undefined";
-        if( this.ls && localStorage[this.LS_NAME] )
+        if( has_storage() && localStorage[this.LS_NAME] )
             this.title = localStorage[this.LS_NAME];
         
         this._update();
@@ -45,7 +44,7 @@ class Title {
     
     _update()
     {
-        if(this.ls)
+        if(has_storage())
             localStorage[this.LS_NAME] = this.title;
         if(this.title == '')
         {
