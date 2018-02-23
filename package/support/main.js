@@ -23,6 +23,15 @@ window.onload = function()
     gid('btnLoad').addEventListener('click', function(){
         gid('fileSelector').click();
     });
+    gid('btnRecover').addEventListener('click', function(){
+        var result = prompt('Base64 recovery string:');
+        if(is_set(result) && result != '')
+        {
+            editor_obj.set(FileIO.import_string(result));
+            title_obj.clear();
+        }
+        
+    });
     gid('fileSelector').addEventListener('change', function(e){
         FileIO.import_f(e.target.files[0], function(t, r){
             title_obj.set(t);

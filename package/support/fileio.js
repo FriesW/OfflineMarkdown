@@ -1,5 +1,11 @@
 class FileIO {
     
+    static import_string(string_in)
+    {
+        var dec = new TextDecoder("utf-8");
+        return dec.decode( pako.inflate( base64js.toByteArray(string_in) ) );
+    }
+    
     static import_f(file, callbackFunc)
     {
         var title = escape(file.name);

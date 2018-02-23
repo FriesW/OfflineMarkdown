@@ -21,5 +21,5 @@ function is_string(item)
 
 function is_set(item)
 {
-    return !is_type(item, 'undefined');
+    return !is_type(item, 'undefined') && item !== null;
 }
