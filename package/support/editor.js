@@ -36,6 +36,26 @@ class Editor {
         
         this.hist = new History(this.md_in.value);
         this._update();
+        
+        //Attach undo/redo to keyboard
+        this.md_in.addEventListener('keydown', function(e){
+            var pass = false;
+            var zKey = 90;
+            var yKey = 89;
+            var ctrl = e.ctrlKey || e.metaKey;
+            if (ctrl && !e.shiftKey && e.keyCode == zKey) //ctrl+z
+                this.undo();
+            else if (ctrl && e.shiftKey && e.keyCode == zKey) //ctrl+shift+z
+                this.redo();
+            else if (ctrl && !e.shiftKey && e.keyCode == yKey) //ctrl+y
+                this.redo();
+            else
+                pass = true;
+            if(!pass)
+                e.preventDefault();
+            return pass;
+        }.bind(this));
+        
     }
     
     clear()
