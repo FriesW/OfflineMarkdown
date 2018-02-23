@@ -55,18 +55,27 @@ class FileIO {
 <!--
 This html was generated from a markdown file using:
 https://github.com/FriesW/OfflineMarkdown
-The original markdown can be reconstructed
-with the following linux/unix commands:
-echo '<<< B64ENC >>>'\\
-| base64 -d | gzip -d > '<<< TITLE >>>.md'
+The original markdown can be reconstructed with
+the recovery string. This can be done in the
+original software using the 'Recover' button, or
+on linux/unix with the following command:
+cat recovery_string.txt | base64 -d | gzip -d > '<<< TITLE >>>.md'
+
+The recovery string is:
+
+
+<<< B64ENC >>>
+
+
+
 -->
 `;
 
         var encoded = base64js.fromByteArray( pako.gzip( markdown, {level:9} ) )
         
         //Replace in reverse order to prevent any collisions
-        base = base.replace("<<< TITLE >>>", title);
         base = base.replace("<<< B64ENC >>>", encoded);
+        base = base.replace("<<< TITLE >>>", title);
         base = base.replace("<<< HTML >>>", html);
         base = base.replace("<<< STYLE >>>", '');
         base = base.replace("<<< PG_TITLE >>>", title);
