@@ -7,7 +7,11 @@ window.onload = function()
     if ( !(window.File && window.FileReader && window.FileList && window.Blob && typeof(Storage) !== "undefined") )
         alert('Oh no! It looks like you have an outdated web browser. This web page is probably broken...\nProceed with caution.');
     
-    //Setup buttons
+    //Setup manager objects
+    editor_obj = new Editor(gid('input'), gid('output'));
+    title_obj = new Title( gid('inTitle') );
+    
+    //Setup buttons click events
     gid('btnClear').addEventListener('click', function(){
         editor_obj.clear();
         title_obj.clear();
@@ -26,19 +30,6 @@ window.onload = function()
         });
         gid('fileSelector').value = '';
     });
-    
-    gid('btnUndo').addEventListener('click', function(){
-        editor_obj.undo();
-    });
-    
-    gid('btnRedo').addEventListener('click', function(){
-        editor_obj.redo();
-    });
-    
-    //Setup title box
-    title_obj = new Title( gid('inTitle') );
-    
-    //Setup title gen button
     gid('btnGenTitle').addEventListener('click', function(){
         var d = new Date();
         var t =    d.getFullYear() + '_' +
@@ -47,6 +38,18 @@ window.onload = function()
            padLeft(d.getHours(), 2) + ':' +
            padLeft(d.getMinutes(), 2);
         title_obj.set(t);
+    });
+    
+    //Setup undo/redo buttons
+    gid('btnUndo').addEventListener('click', function(){
+        editor_obj.undo();
+    });
+    gid('btnRedo').addEventListener('click', function(){
+        editor_obj.redo();
+    });
+    editor_obj.addHistoryListener(function(undo, redo){
+        gid('btnUndo').disabled = !undo;
+        gid('btnRedo').disabled = !redo;
     });
     
     //Setup dropzone
@@ -70,16 +73,6 @@ window.onload = function()
             editor_obj.set(r);
         });
     });
-    
-    
-    editor_obj = new Editor(gid('input'), gid('output'));
-    
-    editor_obj.addHistoryListener(function(undo, redo){
-        console.log('notif', undo, redo);
-        gid('btnUndo').disabled = !undo;
-        gid('btnRedo').disabled = !redo;
-    });
-
 
 
 };
