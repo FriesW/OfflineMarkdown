@@ -45,44 +45,51 @@ class History{
             throw 'history.update: parameter must be a string';
         
         //Check time
-        if( (new Date()).getTime() - this.old_time.getTime() > 7000 ) //7 seconds
+        //Add PREVIOUS current
+        if( (new Date()).getTime() - this.old_time.getTime() > 7000) //7 seconds
         {
             this.add(this.current);
             this.current = new_text;
             return;
         }
         
+        //Add NEW current
+        var go = false;
+        
+        //Quick diff
+        if(!go)
+            go = Math.abs(this.old_text.length - new_text.length) > 120;
+        
         //Calculate difference
-        var diff_array = JsDiff.diffChars(this.old_text, new_text);
-        
-        var total_add = 0;
-        var total_remove =  0;
-        var add_group = false;
-        
-        //var re_group = /[^ \r\n\.;]+(\.|\?|\!|-|;| |\r\n|\r|\n)/; //catches most words
-        var re_group = /[^\r\n\.;]+(\.|\?|\!|;|\r\n|\r|\n)/;
-        for(var i = 0 ; i < diff_array.length; i++)
+        if(!go)
         {
-            var ds = diff_array[i]; //diff_segment
-            if(is_set(ds.removed) && ds.removed)
-                total_remove += ds.value.length;
-            if(is_set(ds.added) && ds.added)
+            var diff_array = JsDiff.diffChars(this.old_text, new_text);
+            
+            var total_add = 0;
+            var total_remove =  0;
+            var add_group = false;
+            
+            //var re_group = /[^ \r\n\.;]+(\.|\?|\!|-|;| |\r\n|\r|\n)/; //catches most words
+            var re_group = /[^\r\n\.;]+(\.|\?|\!|;|\r\n|\r|\n)/; //catches most sentences
+            for(var i = 0 ; i < diff_array.length; i++)
             {
-                total_add += ds.value.length;
-                if(re_group.test(ds.value))
-                    add_group = true;
+                var ds = diff_array[i]; //diff_segment
+                if(is_set(ds.removed) && ds.removed)
+                    total_remove += ds.value.length;
+                if(is_set(ds.added) && ds.added)
+                {
+                    total_add += ds.value.length;
+                    if(re_group.test(ds.value))
+                        add_group = true;
+                }
             }
+            
+            go = total_add > 40 || total_remove > 40 || add_group;
         }
         
-        var go =
-            total_add > 40 ||
-            total_remove > 40 ||
-            add_group ;
+        
         if( go )
-        {
             this.add(new_text);
-        }
-        
         this.current = new_text;
     }
     
