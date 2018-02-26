@@ -60,7 +60,6 @@ class Editor {
     clear()
     {
         this.set('');
-        this.hist.add('');
     }
     
     set(new_md)

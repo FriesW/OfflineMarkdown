@@ -94,8 +94,10 @@ class History{
     backward()
     {
         if(this.has_backward())
+        {
             this.front.push(this.current);
             this.current = this.back.pop();
+        }
         this._set_old();
         return this.current;
     }
@@ -108,8 +110,10 @@ class History{
     forward()
     {
         if(this.has_forward())
+        {
             this.back.push(this.current);
             this.current = this.front.pop();
+        }
         this._set_old();
         return this.current;
     }
