@@ -49,7 +49,9 @@ class FileIO {
 </style>
 </head>
 <body>
+<div id="_markdown_content_body">
 <<< HTML >>>
+</div>
 </body>
 </html>
 <!--
@@ -77,7 +79,7 @@ The recovery string is:
         base = base.replace("<<< B64ENC >>>", encoded);
         base = base.replace("<<< TITLE >>>", title);
         base = base.replace("<<< HTML >>>", html);
-        base = base.replace("<<< STYLE >>>", '');
+        base = base.replace("<<< STYLE >>>", markdown_style);
         base = base.replace("<<< PG_TITLE >>>", title);
         
         FileIO._dl_file(title + '.md', markdown);

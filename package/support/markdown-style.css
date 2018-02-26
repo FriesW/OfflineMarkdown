@@ -1,0 +1,65 @@
+.markdown-body {
+    font-family: Arial,"Helvetica Neue",Helvetica,sans-serif;
+}
+.markdown-body hr {
+    border: 0;
+    height: 3px;
+    background-color: #d0d0d0;
+}
+.markdown-body h1+hr, .markdown-body h2+hr, .markdown-body h3+hr, .markdown-body h4+hr, .markdown-body h5+hr, .markdown-body h6+hr {
+    position: relative;
+    top: -1.2em;
+    margin: 0;
+    height: 1px;
+    background-color: black;
+}
+.markdown-body h1+hr+*, .markdown-body h2+hr+*, .markdown-body h3+hr+*, .markdown-body h4+hr+*, .markdown-body h5+hr+*, .markdown-body h6+hr+* {
+    margin-top: 0;
+}
+.markdown-body img {
+    max-width: 100%;
+}
+.markdown-body a {
+    text-decoration: none;
+}
+.markdown-body a:hover {
+    text-decoration: underline;
+}
+.markdown-body blockquote {
+    margin: 0;
+    padding: 0.5em 2em;
+    background-color: #f4f4f4;
+    border-left: 0.4em solid #c6c6c6;
+    color: #636363;
+}
+.markdown-body blockquote p {
+    margin: 0;
+}
+.markdown-body pre {
+    padding: 0.7em;
+    overflow: auto;
+}
+.markdown-body code {
+    padding: 0.1em 0.2em;
+    border-radius: 0.3em;
+    background-color: #e0e0d9;
+    display: inline-block;
+}
+.markdown-body pre, .markdown-body pre code {
+    background-color: #f4f4f4;
+}
+.markdown-body table {
+    border-collapse: collapse;
+    display: block;
+    overflow: auto;
+}
+.markdown-body th, td {
+    padding: 0.4em;
+    border: 1px solid #bababa;
+}
+.markdown-body th {
+    background-color: #dadada;
+}
+.markdown-body tr:nth-child(even) {
+    background-color: #f4f4ff;
+}
