@@ -41,11 +41,11 @@ window.onload = function()
     });
     gid('btnGenTitle').addEventListener('click', function(){
         var d = new Date();
-        var t =    d.getFullYear() + '_' +
-           padLeft(d.getMonth() + 1, 2) + '_' +
-           padLeft(d.getDate(), 2) + '--' +
-           padLeft(d.getHours(), 2) + ':' +
-           padLeft(d.getMinutes(), 2);
+        var t =
+           'minutes_' +
+           d.getFullYear() +
+           padLeft(d.getMonth() + 1, 2) +
+           padLeft(d.getDate(), 2);
         title_obj.set(t);
     });
     
